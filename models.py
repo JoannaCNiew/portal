@@ -18,6 +18,13 @@ from sqlalchemy.orm import relationship
 Base = declarative_base()
 
 
+articles_hashtags = Table(
+    "articles_hashtags",
+    Base.metadata,
+    Column("article_id", Integer, ForeignKey("articles.id")),
+    Column("hashtag_id", Integer, ForeignKey("hashtags.id"))
+)
+
 class Author(Base):
     __tablename__ = "authors"
 
@@ -41,6 +48,12 @@ class Hashtag(Base):
     name = Column(String(50), unique=True, nullable=False)
     creation_date = Column(DateTime, default=datetime.now)
 
+    articles = relationship(
+        "Articles",
+        secondary=articles_hashtags,
+        back_populates="hashtags"
+    )
+
     def __repr__(self):
         return f"Hashtag({self.name})"
 
@@ -55,6 +68,11 @@ class Articles(Base):
     author_id = Column(Integer, ForeignKey("authors.id"))
 
     author = relationship("Author", back_populates="articles")
+    hashtags = relationship(
+        "Hashtag",
+        secondary=articles_hashtags,
+        back_populates="articles"
+    )
 
     def __repr__(self):
         return f"Article({self.title})"
