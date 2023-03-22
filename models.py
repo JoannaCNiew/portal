@@ -6,15 +6,13 @@ from sqlalchemy import (
     String,
     Integer,
     Date,
-    create_engine, ForeignKey, Table, DateTime
+    ForeignKey, Table, DateTime
 )
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-engine = create_engine(
-    "mysql+pymysql://root:?cwks19!16@127.0.0.1:3306/portal"
-)
-Base = declarative_base(bind=engine)
+
+Base = declarative_base()
 
 
 class User(Base):
@@ -30,3 +28,13 @@ class User(Base):
     def __repr__(self):
         return f"User({self.nickname})"
 
+
+class Hashtag(Base):
+    __tablename__ = "hashtags"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), unique=True, nullable=False)
+    creation_date = Column(DateTime, default=datetime.now)
+
+    def __repr__(self):
+        return f"Hashtag({self.name})"
