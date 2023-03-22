@@ -6,7 +6,10 @@ from sqlalchemy import (
     String,
     Integer,
     Date,
-    ForeignKey, Table, DateTime
+    Text,
+    ForeignKey,
+    Table,
+    DateTime
 )
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -38,3 +41,17 @@ class Hashtag(Base):
 
     def __repr__(self):
         return f"Hashtag({self.name})"
+
+
+class Articles(Base):
+    __tablename__ = "articles"
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String(70), nullable=False, unique=True)
+    content = Column(Text, nullable=False)
+    creation_date = Column(DateTime, default=datetime.now)
+    author_id = Column(Integer, ForeignKey("users.id"))
+
+    def __repr__(self):
+        return f"Article({self.title})"
+
