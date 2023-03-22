@@ -28,6 +28,8 @@ class Author(Base):
     email = Column(String(50), unique=True, nullable=False)
     registration_date = Column(DateTime, default=datetime.now)
 
+    articles = relationship("Articles", back_populates="author")
+
     def __repr__(self):
         return f"Author({self.nickname})"
 
@@ -51,6 +53,8 @@ class Articles(Base):
     content = Column(Text, nullable=False)
     creation_date = Column(DateTime, default=datetime.now)
     author_id = Column(Integer, ForeignKey("authors.id"))
+
+    author = relationship("Author", back_populates="articles")
 
     def __repr__(self):
         return f"Article({self.title})"
